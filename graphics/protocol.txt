@@ -1,0 +1,120 @@
+PROCOTOL
+
+
+each data sent by the server must be formatted as follows :
+
+[package size + sizeof(e_protocol_cmd)]/[data type]/[package]
+
+
+
+1) connection
+
+
+
+once the graphic client connects to the server, a t_protocol_data structure is sent by the server.
+It contains the map dimensions and the current time unit. The package contains after this structure a list of dimensions.width * dimensions.height t_cell structures containing the cells specificities.
+
+
+
+2) data type
+
+
+
+each data belongs to a data type defined by the procotol :
+
+E_CMD_PLAYER		: every data belonging to the players
+E_CMD_INCANTATION	: every data belonging to the incantations
+E_CMD_EGG		: every data belonging to the eggs
+E_CMD_SERVER		: every data belonging to the server
+
+
+a) E_CMD_PLAYER
+
+
+the first package structure will be a t_protocol_player structure. It includes the player id and an action :
+
+-> E_PLAYER_NEW			: new player in the server	(package: t_player structure with the new player assets)
+-> E_PLAYER_MOVE		: player is moving		(package: an enum e_player_direction for the direction)
+-> E_PLAYER_EXPLUSE		: ?
+-> E_PLAYER_BROADCAST		: player is broadcasting	(package: a string for the message)
+-> E_PLAYER_FORK		: player is forking		(package: t_egg with the new egg being created)
+-> E_PLAYER_DELETE_RESSOURCE	: player deletes ressource	(package: an int for the ressource id)
+-> E_PLAYER_GET_RESSOURCE	: player gets ressource		(package: an int for the ressource id)
+-> E_PLAYER_DIE			: player dies			(package: nothing)
+-> E_PLAYER_NEW_FOR_EGG		: ?
+
+
+b) E_CMD_INCANTATION
+
+
+the first package structure will be a t_protocol_incantation structure. It includes the player id and an action :
+
+-> E_INCANTATION_BEGIN		: incantation begins		(package: a t_position struct describing the cell and a t_player list with all the players concerned,
+   				  	      				  the first being the incantation initiator)
+-> E_INCANTATION_END		: incantation ends		(package: an int for the result of the incantation + if it successes, a list of int for the player ids to level up)
+
+
+c) E_CMD_EGG
+
+
+the first package structure will be a t_protocol_egg structure. It includes the player id and an action :
+
+-> E_EGG_HATCH			: an egg hatches		(package: an int for the egg id)
+-> E_EGG_DIE			: an egg dies			(package: an int for the egg id)
+
+
+d) E_CMD_SERVER
+
+
+the first package structure will be a t_protocol_server structure. It includes the player id and an action :
+
+-> E_SERVER_GAME_END		: the game ends			(package: nothing)
+-> E_SERVER_MSG			: message from the server	(package: a string contaning the message)
+-> E_SERVER_UNKNOWN_CMD		: unknown command		(package: the bad command)
+-> E_SERVER_BAD_PARAMS		: bad parameters for a command	(package: the help of the command)
+
+
+
+3) communication
+
+
+
+The graphic client cas send commands to the server to update his internal data.
+
+
+a) "player"
+
+
+The "player" command asks the server data about a player.
+
+Usage: player [id]
+The server replies by a t_player structure.
+
+
+b) "map_data"
+
+
+The "map_data" command asks the server data about the map and the cells.
+
+Usage: map_data
+The server replies by a t_protocol_data structure.
+
+
+c) "time_unit"
+
+
+The "time_unit" command asks the server data about the current time unit and allows the graphic client to modify it.
+
+Usage: time_unit [set/get] [time]
+	-> time_unit get
+	-> time_unit set 10
+The server replies by the current / modified time unit
+
+
+d) "teams"
+
+
+The "teams" command asks the server data about the current teams data.
+
+Usage: teams
+The server replies by an int for the number of teams and a list of t_team structures.

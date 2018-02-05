@@ -1,0 +1,35 @@
+# Segfaults
+vgcore*
+
+# Emacs and tmp files
+*~
+\#*\#
+.#*
+
+# CLion
+.idea/
+cmake-build-debug
+cmake-build-release
+
+# Compilations
+*.o
+*.gch
+
+# Binaries
+a.out
+zappy_ia
+
+# Misc
+notes
+a.out
+arcade_ui
+urandom.txt
+client/zappy_ai
+common/lib/
+graphic/zappy_graphic
+zappy_server/zappy_server
+build/
+
+zappy_graphics
+zappy_server
+zappy_ai

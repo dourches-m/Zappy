@@ -1,0 +1,6 @@
+{
+  "tests_my_ordicts.py::TestOrdicts::()::test_next": true,
+  "tests_my_ordicts.py::TestOrdicts::()::test_prev": true,
+  "tests_my_ordicts.py::TestOrdicts::()::test_trick_next": true,
+  "tests_my_ordicts.py::TestOrdicts::()::test_trick_prev": true
+}
